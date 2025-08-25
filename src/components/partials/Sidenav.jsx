@@ -1,4 +1,4 @@
-import React from "react";
+// import from "react";
 import { Link } from "react-router-dom";
 
 const Sidenav = () => {
@@ -7,7 +7,7 @@ const Sidenav = () => {
       <div className="w-[20%] h-full border-r-[2px] border-zinc-600 p-3">
         <h1 className="text-2xl font-bold ">
           <i className="text-[#e91e63] ri-movie-ai-fill mr-3"></i>
-          <span className="text-white cursor-default">Movie HUB</span>
+          <span className="text-white cursor-default">MovieHUB</span>
         </h1>
         <nav className="flex flex-col text-xl text-zinc-400 gap-3 ">
           <h1 className="text-white font-semibold text-xl mt-10 mb-5 cursor-default">
@@ -34,10 +34,10 @@ const Sidenav = () => {
           <h1 className="text-white font-semibold text-xl mt-10 mb-5 cursor-default">
             Our Info
           </h1>
-          <Link className="hover:bg-[#e91e63] hover:text-white  duration-500 ease-in-out hover:text-[21px]  rounded-lg p-3">
+          <Link to={'/about'} className="hover:bg-[#e91e63] hover:text-white  duration-500 ease-in-out hover:text-[21px]  rounded-lg p-3">
             <i className="ri-information-fill mr-4"></i> About
           </Link>
-          <Link className="hover:bg-[#e91e63] hover:text-white  duration-500 ease-in-out hover:text-[21px] rounded-lg p-3">
+          <Link to={'/contact'} className="hover:bg-[#e91e63] hover:text-white  duration-500 ease-in-out hover:text-[21px] rounded-lg p-3">
             <i className="ri-phone-fill mr-4"></i> Contact
           </Link>
         </nav>
