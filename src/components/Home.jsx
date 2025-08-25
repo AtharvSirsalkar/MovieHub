@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Sidenav from "./partials/Sidenav";
 import TopNav from "./partials/TopNav";
 import Headers from "./partials/Headers";
@@ -36,7 +36,12 @@ const Home = () => {
   
   useEffect(() => {
     getTranding();
+    
   }, [option]);
+
+  useEffect(() => {
+    console.log("Wallpaper:",Wallpaper);
+  },[])
 
   useEffect(() => {
     
@@ -55,7 +60,8 @@ const Home = () => {
 
   return Wallpaper && tranding ? (
     <>
-      <Sidenav />
+      
+      <Sidenav data={Wallpaper} blur={Query.length > 0} />
       <div className="w-[80%] h-full overflow-x-hidden">
         <TopNav Query={Query} setQuery={setQuery} data={tranding} />
         <Headers data={Wallpaper} blur={Query.length > 0} />

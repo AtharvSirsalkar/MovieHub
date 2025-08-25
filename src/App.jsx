@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+// import  from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Trending from "./components/Trending";
@@ -11,6 +11,8 @@ import Tvdetails from "./components/partials/Tvdetails";
 import Persondetails from "./components/partials/Persondetails";
 import Trailer from "./components/partials/Trailer";
 import NotFound from "./components/partials/NotFound";
+import About from "./components/About";
+import Contact from "./components/Contact";
 
 const App = () => {
   return (
@@ -30,6 +32,8 @@ const App = () => {
         <Route path="/people" element={<People />}></Route>
         <Route path="/people/details/:id" element={<Persondetails />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );
