@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TopNav from "./partials/TopNav";
 import Dropdown from "./partials/Dropdown";
 import axios from "../utils/axios";
@@ -15,9 +15,10 @@ const Movie = () => {
   const [page, setpage] = useState(1);
   const [hasmore, sethasmore] = useState(true);
   const navigate = useNavigate();
-  document.title = "Movie HUB | Movie" + " "+category.toUpperCase().split('_').join(" ");
-  ;
-  
+
+  document.title =
+    "Movie HUB | Movie " + category.toUpperCase().split("_").join(" ");
+
   const getMovie = async () => {
     try {
       const { data } = await axios.get(`/movie/${category}?page=${page}`);
@@ -45,33 +46,38 @@ const Movie = () => {
   useEffect(() => {
     refreshHandler();
   }, [category]);
+
   return movie ? (
     <>
-      <div className="w-screen h-screen bg-[#1f1e24]">
-        <div className="w-full mb-10 flex px-[3%] items-center  justify-between">
-          <div className="flex items-center justify-center gap-3">
+      <div className="w-screen min-h-screen bg-[#1f1e24]">
+        {/* Header Section */}
+        <div className="w-full mb-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between px-[3%]">
+          {/* Left Section */}
+          <div className="flex items-center gap-3">
             <i
               onClick={() => navigate(-1)}
               className="font-semibold cursor-pointer text-zinc-400 duration-500 ease-out hover:text-[#E91E63] text-xl ri-arrow-go-back-line"
             ></i>
-            <h1 className="text-2xl text-zinc-400 font-semibold cursor-default">
-              {category.toUpperCase().split('_').join(' ')} Movies
+            <h1 className="text-xl sm:text-2xl text-zinc-400 font-semibold cursor-default">
+              {category.toUpperCase().split("_").join(" ")} Movies
             </h1>
           </div>
-          <div className="flex  items-center w-[80%]">
+
+          {/* Search + Dropdown */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 w-full md:w-[70%]">
             <TopNav setQuery={setQuery} Query={Query} />
             <Dropdown
               title={"Category"}
-              options={["popular","top_rated","upcoming","now_playing"]}
+              options={["popular", "top_rated", "upcoming", "now_playing"]}
               fun={(e) => setcategory(e.target.value)}
             />
-            
           </div>
         </div>
+
+        {/* Infinite Scroll Section */}
         <InfiniteScroll
           loader={
             <div className="p-28 flex items-center justify-center w-full bg-[#1f1e24]">
-
               <Grid
                 visible={true}
                 height="80"
@@ -88,13 +94,13 @@ const Movie = () => {
           next={getMovie}
           hasMore={hasmore}
         >
-          <Cards blur={Query.length} data={movie} title='movie' />
+          <Cards blur={Query.length} data={movie} title="movie" />
         </InfiniteScroll>
       </div>
     </>
   ) : (
     <Loading />
   );
-}
+};
 
-export default Movie
+export default Movie;

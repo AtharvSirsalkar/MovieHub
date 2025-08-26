@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TopNav from "./partials/TopNav";
 import Dropdown from "./partials/Dropdown";
 import axios from "../utils/axios";
@@ -15,9 +15,9 @@ const Tvshows = () => {
   const [page, setpage] = useState(1);
   const [hasmore, sethasmore] = useState(true);
   const navigate = useNavigate();
-  document.title = "Movie HUB | TV" + " "+category.toUpperCase().split('_').join(" ");
-  ;
-  
+
+  document.title = "Movie HUB | TV " + category.toUpperCase().split("_").join(" ");
+
   const getTvShows = async () => {
     try {
       const { data } = await axios.get(`/tv/${category}?page=${page}`);
@@ -33,45 +33,46 @@ const Tvshows = () => {
   };
 
   const refreshHandler = () => {
-    if (TvShows.length === 0) {
-      getTvShows();
-    } else {
-      setpage(1);
-      setTvshows([]);
-      getTvShows();
-    }
+    setpage(1);
+    setTvshows([]);
+    getTvShows();
   };
 
   useEffect(() => {
     refreshHandler();
   }, [category]);
+
   return TvShows ? (
     <>
-      <div className="w-screen h-screen bg-[#1f1e24]">
-        <div className="w-full mb-10 flex px-[3%] items-center  justify-between">
-          <div className="flex items-center justify-center gap-3">
+      {/* Full-screen wrapper with fixed dark background */}
+      <div className="w-screen min-h-screen bg-[#1f1e24]">
+        {/* Header bar */}
+        <div className="w-full mb-6 flex px-[3%] items-center justify-between">
+          <div className="flex items-center gap-3">
             <i
               onClick={() => navigate(-1)}
               className="font-semibold cursor-pointer text-zinc-400 duration-500 ease-out hover:text-[#E91E63] text-xl ri-arrow-go-back-line"
             ></i>
-            <h1 className="text-2xl text-zinc-400 font-semibold cursor-default">
-             TV SHOWS
+            <h1 className="text-xl md:text-2xl text-zinc-400 font-semibold">
+              TV SHOWS
             </h1>
           </div>
-          <div className="flex  items-center w-[80%]">
+
+          <div className="flex items-center gap-3 w-[70%] md:w-[80%]">
             <TopNav setQuery={setQuery} Query={Query} />
             <Dropdown
               title={"Category"}
-              options={["popular","top_rated","on_the_air","airing_today"]}
+              options={["popular", "top_rated", "on_the_air", "airing_today"]}
               fun={(e) => setcategory(e.target.value)}
             />
-            
           </div>
         </div>
-        <InfiniteScroll
-          loader={
-            <div className="p-28 flex items-center justify-center w-full bg-[#1f1e24]">
 
+        {/* Infinite Scroll inside dark container */}
+        <InfiniteScroll
+          className="bg-[#1f1e24]" // 👈 keeps background dark
+          loader={
+            <div className="p-10 flex items-center justify-center w-full bg-[#1f1e24]">
               <Grid
                 visible={true}
                 height="80"
@@ -79,8 +80,6 @@ const Tvshows = () => {
                 color="#E91E63"
                 ariaLabel="grid-loading"
                 radius="12.5"
-                wrapperStyle={{}}
-                wrapperClass="grid-wrapper"
               />
             </div>
           }
@@ -88,13 +87,15 @@ const Tvshows = () => {
           next={getTvShows}
           hasMore={hasmore}
         >
-          <Cards blur={Query.length} data={TvShows} title='tv' />
+          <div className="bg-[#1f1e24]">
+            <Cards blur={Query.length} data={TvShows} title="tv" />
+          </div>
         </InfiniteScroll>
       </div>
     </>
   ) : (
     <Loading />
   );
-}
+};
 
-export default Tvshows
+export default Tvshows;

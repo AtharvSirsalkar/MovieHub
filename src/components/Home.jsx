@@ -60,14 +60,15 @@ const Home = () => {
 
   return Wallpaper && tranding ? (
     <>
-      
-      <Sidenav data={Wallpaper} blur={Query.length > 0} />
-      <div className="w-[80%] h-full overflow-x-hidden">
-        <TopNav Query={Query} setQuery={setQuery} data={tranding} />
+    <Sidenav />
+    <div className="overflow-y-auto">
+      <TopNav Query={Query} setQuery={setQuery} data={tranding} />
+     <div className="absolute h-screen w-full left-[0%] z-[99] md:static md:left-0">
         <Headers data={Wallpaper} blur={Query.length > 0} />
         <CardNav setoption={setoption} />
-        <HorizontalCrds data={tranding} setoption={setoption}/>
+        <HorizontalCrds data={tranding} setoption={setoption} />
       </div>
+    </div>
     </>
   ) : (
     <Loading />
