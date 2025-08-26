@@ -45,7 +45,7 @@ const TopNav = ({ Query, setQuery, data }) => {
         )}
 
         {/* Dropdown Results */}
-        <div className="w-full sm:w-[80%] md:w-[70%] max-h-[50vh] absolute top-[100%] left-0 sm:left-auto sm:right-0 bg-zinc-900 sm:bg-transparent z-20 rounded-lg overflow-auto shadow-lg">
+        <div className="bg-transparent w-full sm:w-[80%] md:w-[70%] max-h-[50vh] absolute top-[100%] left-0 sm:left-auto sm:right-0 z-[100] rounded-lg overflow-auto shadow-lg">
           {Query.length > 0 &&
             searches.map((search, index) => (
               <Link
