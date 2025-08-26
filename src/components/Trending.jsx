@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import TopNav from "./partials/TopNav";
 import Dropdown from "./partials/Dropdown";
 import axios from "../utils/axios";
@@ -7,7 +7,6 @@ import Cards from "./partials/Cards";
 import Loading from "./partials/Loading";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Grid } from "react-loader-spinner";
-
 
 const Trending = () => {
   const [category, setcategory] = useState("all");
@@ -18,7 +17,8 @@ const Trending = () => {
   const [hasmore, sethasmore] = useState(true);
   const navigate = useNavigate();
 
-  document.title = "Movie HUB | Popular" + " "+category.toUpperCase()
+  document.title = "Movie HUB | Popular " + category.toUpperCase();
+
   const getTranding = async () => {
     try {
       const { data } = await axios.get(
@@ -41,19 +41,22 @@ const Trending = () => {
     } else {
       setpage(1);
       settranding([]);
-      getTranding()
+      getTranding();
     }
   };
 
   useEffect(() => {
     refreshHandler();
+    // eslint-disable-next-line
   }, [category, duration]);
 
   return tranding ? (
     <>
-      <div className="w-screen h-screen bg-[#1f1e24]">
-        <div className="w-full mb-10 flex px-[3%] items-center justify-between">
-          <div className="flex items-center  justify-center gap-3">
+      <div className="w-screen min-h-screen bg-[#1f1e24]">
+        {/* Top Header Section */}
+        <div className="w-full mb-10 flex flex-col lg:flex-row px-[3%] items-start lg:items-center justify-between gap-5">
+          {/* Back + Heading */}
+          <div className="flex items-center gap-3">
             <i
               onClick={() => navigate(-1)}
               className="font-semibold cursor-pointer text-zinc-400 duration-500 ease-out hover:text-[#E91E63] text-xl ri-arrow-go-back-line"
@@ -62,35 +65,39 @@ const Trending = () => {
               Trending {category.toUpperCase()}'s
             </h1>
           </div>
-          <div className="flex items-center w-[80%]">
+
+          {/* Search + Dropdowns */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full lg:w-[70%]">
             <TopNav setQuery={setQuery} Query={Query} />
+
             <Dropdown
               title={"Category"}
-              options={["movie", "tv","all"]}
+              options={["movie", "tv", "all"]}
               fun={(e) => setcategory(e.target.value)}
             />
-            <div className="w-[2%]"></div>
+
             <Dropdown
               title={"Duration"}
-              options={["week","day"]}
+              options={["week", "day"]}
               fun={(e) => setduration(e.target.value)}
             />
           </div>
         </div>
-        <InfiniteScroll
-          loader={<div className="p-28 flex items-center justify-center w-full bg-[#1f1e24]">
 
-            <Grid
-              visible={true}
-              height="80"
-              width="80"
-              color="#E91E63"
-              ariaLabel="grid-loading"
-              radius="12.5"
-              wrapperStyle={{}}
-              wrapperClass="grid-wrapper"
-            />
-          </div>}
+        {/* Infinite Scroll Cards */}
+        <InfiniteScroll
+          loader={
+            <div className="p-28 flex items-center justify-center w-full bg-[#1f1e24]">
+              <Grid
+                visible={true}
+                height="80"
+                width="80"
+                color="#E91E63"
+                ariaLabel="grid-loading"
+                radius="12.5"
+              />
+            </div>
+          }
           dataLength={tranding.length}
           next={getTranding}
           hasMore={hasmore}

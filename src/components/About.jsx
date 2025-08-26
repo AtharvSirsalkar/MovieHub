@@ -6,7 +6,6 @@ import Loading from "./partials/Loading";
 const About = () => {
   const [Wallpaper, setWallpaper] = useState(null);
   const [currentImage, setCurrentImage] = useState("");
-//   const [nextImage, setNextImage] = useState("");
   const [fade, setFade] = useState(false);
 
   const getWallpaper = async () => {
@@ -14,12 +13,6 @@ const About = () => {
       const { data } = await axios.get(`/trending/all/day`);
       const randomWallpaper =
         data.results[(Math.random() * data.results.length).toFixed()];
-      console.log(
-        "randomWallpaper: ",
-        (Math.random() * data.results.length).toFixed()
-      );
-      console.log("randomWallpaper: ", randomWallpaper);
-
       setWallpaper(randomWallpaper);
     } catch (error) {
       console.error(error);
@@ -27,15 +20,12 @@ const About = () => {
   };
 
   useEffect(() => {
+    getWallpaper(); // initial
     const intervalId = setInterval(() => {
-      if (!Wallpaper) {
-        getWallpaper();
-      }
-    }, 4000);
+      getWallpaper();
+    }, 8000); // change every 8s
 
-    return () => {
-      clearInterval(intervalId);
-    };
+    return () => clearInterval(intervalId);
   }, []);
 
   useEffect(() => {
@@ -45,9 +35,6 @@ const About = () => {
         Wallpaper.profile_path ||
         Wallpaper.poster_path
       }`;
-
-    //   setNextImage(newImage);
-      console.log("new image: ", newImage);
 
       setFade(true);
       const timeout = setTimeout(() => {
@@ -59,90 +46,103 @@ const About = () => {
     }
   }, [Wallpaper]);
 
-  return Wallpaper ?  (
-    <div className={`relative w-full h-[100vh]`}>
-      <div
-        key={currentImage}
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.5),rgba(0,0,0,.7)),url(${currentImage})`,
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-        }}
-        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-500  ${blur ? "blur-sm" : ""} ${
-          fade ? "opacity-0" : "opacity-100"
-        } animate-zoom`}
-      ></div>
+  return Wallpaper ? (
+    <div className="relative z-[999] w-full min-h-screen">
+      {/* Background (fixed, always covers screen) */}
+      <div className="fixed inset-0 w-full h-full -z-10">
+        <img
+          src={currentImage}
+          alt="background"
+          className={`w-full h-full object-cover transition-opacity duration-700 ${
+            fade ? "opacity-0" : "opacity-100"
+          }`}
+        />
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80"></div>
+      </div>
 
-      {/* 
-      <div
-        style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.5),rgba(0,0,0,.7)),url(${nextImage})`,
-          backgroundPosition: "top 1%",
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
-        className={`absolute top-0 left-0 w-full h-full transition-opacity duration-1000 ${
-          fade ? "opacity-0" : "opacity-100"
-        }`}
-      ></div> 
-      */}
+      {/* Content */}
+      <div className="relative flex flex-col items-start justify-center z-10 px-4 sm:px-6 md:px-12 lg:px-20 py-10 sm:py-14 lg:py-20 space-y-8">
+        <h1 className="w-full md:w-3/4 lg:w-2/3 font-[Poppins] text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-white leading-tight drop-shadow-lg">
+          Your Ultimate Ad-Free Movie & TV Trailer Hub
+        </h1>
 
-<div className="relative flex flex-col items-start justify-center z-[100] px-10 py-10">
-  <h1 className="w-[70%] font-[Poppins] text-5xl font-black text-white cursor-default leading-tight drop-shadow-lg">
-    Your Ultimate Ad-Free Movie & TV Trailer Hub
-  </h1>
+        <p className="w-full md:w-3/4 lg:w-2/3 text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed">
+          Explore movies and TV shows like never before – search, watch ad-free
+          trailers, discover trending titles, view cast details, and find where
+          to stream them online.
+        </p>
 
-  <p className="w-[70%] text-lg text-gray-200 cursor-default">
-    Explore movies and TV shows like never before – search, watch ad-free trailers, 
-    discover trending titles, view cast details, and find where to stream them online.
-  </p>
+        {/* Features Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full md:w-4/5">
+          <div className="p-5 bg-black/40 backdrop-blur-sm rounded-xl shadow-md text-white hover:scale-105 duration-500 border border-white/10">
+            <i className="ri-movie-2-fill text-3xl text-pink-400 block mb-2"></i>
+            <h3 className="text-lg md:text-xl font-semibold mb-2">
+              Ad-Free Trailers
+            </h3>
+            <p className="text-sm text-gray-300">
+              Watch trailers without interruptions or ads.
+            </p>
+          </div>
 
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-[80%] mt-6">
-    <div className="p-4 bg-black/40 rounded-xl shadow-md text-white hover:scale-105 ease duration-500 hover:shadow-lg">
-      <i className="ri-movie-2-fill text-3xl text-pink-400"></i>
-      <h3 className="text-xl font-semibold mt-2">Ad-Free Trailers</h3>
-      <p className="text-sm mt-1">Watch trailers without interruptions or ads.</p>
+          <div className="p-5 bg-black/40 backdrop-blur-sm rounded-xl shadow-md text-white hover:scale-105 duration-500 border border-white/10">
+            <i className="ri-search-eye-fill text-3xl text-blue-400 block mb-2"></i>
+            <h3 className="text-lg md:text-xl font-semibold mb-2">
+              Smart Search
+            </h3>
+            <p className="text-sm text-gray-300">
+              Find any movie, TV series, or actor instantly.
+            </p>
+          </div>
+
+          <div className="p-5 bg-black/40 backdrop-blur-sm rounded-xl shadow-md text-white hover:scale-105 duration-500 border border-white/10">
+            <i className="ri-fire-fill text-3xl text-yellow-400 block mb-2"></i>
+            <h3 className="text-lg md:text-xl font-semibold mb-2">
+              Trending Now
+            </h3>
+            <p className="text-sm text-gray-300">
+              Discover the hottest movies & shows today.
+            </p>
+          </div>
+        </div>
+
+        {/* How it works */}
+        <div className="w-full md:w-4/5 text-white">
+          <div className="bg-black/30 backdrop-blur-sm rounded-xl p-6 border border-white/10">
+            <h2 className="text-xl md:text-2xl font-bold mb-4">How It Works</h2>
+            <ol className="list-decimal list-inside space-y-2 text-gray-200 text-sm md:text-base">
+              <li>Search for your favorite movie or show.</li>
+              <li>Watch its trailer & read the description.</li>
+              <li>Check where it's available to watch online.</li>
+            </ol>
+          </div>
+        </div>
+
+        {/* Footer Info */}
+        <div className="w-full md:w-4/5">
+          <div className="bg-black/20 backdrop-blur-sm rounded-xl p-5 border border-white/10">
+            <p className="text-gray-400 text-sm">
+              This app is powered by the free{" "}
+              <span className="text-blue-400 font-semibold">TMDB API</span>, built with{" "}
+              <span className="text-pink-400 font-semibold">React.js</span> and{" "}
+              <span className="text-pink-400 font-semibold">Tailwind CSS</span> for a smooth
+              experience.
+            </p>
+          </div>
+        </div>
+
+        {/* CTA Button */}
+        <Link to="/" className="mt-4">
+          <button className="px-6 py-3 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 rounded-xl text-white text-lg font-bold transition-transform hover:scale-105 shadow-lg">
+            <i className="ri-arrow-right-line mr-2"></i>
+            Start Exploring
+          </button>
+        </Link>
+      </div>
     </div>
-
-    <div className="p-4 bg-black/40 rounded-xl shadow-md text-white hover:scale-105 ease duration-500 hover:shadow-lg">
-      <i className="ri-search-eye-fill text-3xl text-blue-400"></i>
-      <h3 className="text-xl font-semibold mt-2">Smart Search</h3>
-      <p className="text-sm mt-1">Find any movie, TV series, or actor instantly.</p>
-    </div>
-
-    <div className="p-4 bg-black/40 rounded-xl shadow-md text-white hover:scale-105 ease duration-500 hover:shadow-lg">
-      <i className="ri-fire-fill text-3xl text-yellow-400"></i>
-      <h3 className="text-xl font-semibold mt-2">Trending Now</h3>
-      <p className="text-sm mt-1">Discover the hottest movies & shows today.</p>
-    </div>
-  </div>
-
-  <div className="w-[80%] mt-6 text-white">
-    <h2 className="text-2xl font-bold mb-3">How It Works</h2>
-    <ol className="list-decimal list-inside space-y-1 text-gray-200">
-      <li>Search for your favorite movie or show.</li>
-      <li>Watch its trailer & read the description.</li>
-      <li>Check where it’s available to watch online.</li>
-    </ol>
-  </div>
-
-  <p className="w-[80%] text-gray-400 text-sm mt-4 italic">
-    This app is powered by the free <span className="text-blue-400">TMDB API</span>, 
-    built with <span className="text-pink-400">React.js</span> and 
-    <span className="text-pink-400"> Tailwind CSS</span> for a smooth experience.
-  </p>
-
-  <Link to="/" className="mt-6">
-  <button className="mt-6 px-6 py-3 bg-pink-500 hover:bg-pink-600 rounded-xl text-white text-lg font-bold transition-transform hover:scale-105">
-    Start Exploring
-  </button></Link>
-</div>
-
-    </div>
-  ): (
+  ) : (
     <Loading />
-  )
+  );
 };
 
 export default About;
